@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en" manifest="cache.manifest">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2E7D32">
+    <meta name="description" content="AI-powered cattle health monitoring for rural Indian farmers">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CattleHealth Pro">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192x192.png">
+    
+    <title>🐄 CattleHealth Pro - Advanced AI Health Monitor</title>
+    
+    <!-- Google Translate API -->
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
+    
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <!-- Offline Banner -->
+    <div class="offline-banner" id="offlineBanner">
+        📡 Working Offline - Data will sync when connection is restored
+    </div>
+
+    <!-- PWA Install Prompt -->
+    <div class="install-prompt" id="installPrompt">
+        <span>📱 Install CattleHealth Pro for offline access and better performance</span>
+        <button onclick="installPWA()">Install</button>
+        <button onclick="dismissInstall()">Later</button>
+    </div>
+
+    <!-- Voice Recognition Indicator -->
+    <div class="voice-indicator" id="voiceIndicator">
+        <div class="voice-animation"></div>
+        <div>🎤 Listening for voice commands...</div>
+        <div class="voice-commands">
+            Say: "Analyze cattle" • "Dashboard" • "Community" • "Finance"
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Enhanced Header -->
+        <header class="header">
+            <div class="header-top">
+                <div class="logo">
+                    🐄 <span>CattleHealth Pro</span>
+                </div>
+                <div class="status-indicators">
+                    <div class="connection-status" id="connectionStatus">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Online</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Translate Bar -->
+            <div class="translate-bar">
+                <select class="lang-select" id="languageSelector" onchange="changeLanguage()" aria-label="Select Language">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="hi">🇮🇳 हिंदी</option>
+                    <option value="mr">🇮🇳 मराठी</option>
+                    <option value="gu">🇮🇳 ગુજરાતી</option>
+                    <option value="ta">🇮🇳 தமிழ்</option>
+                    <option value="te">🇮🇳 తెలుగు</option>
+                    <option value="kn">🇮🇳 ಕನ್ನಡ</option>
+                    <option value="ml">🇮🇳 മലയാളം</option>
+                    <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
+                    <option value="bn">🇮🇳 বাংলা</option>
+                    <option value="or">🇮🇳 ଓଡ଼ିଆ</option>
+                    <option value="as">🇮🇳 অসমীয়া</option>
+                </select>
+                
+                <div id="google_translate_element"></div>
+                
+                <button class="voice-toggle" id="voiceToggle" onclick="toggleVoiceCommand()" aria-label="Voice Commands">
+                    🎤 Voice
+                </button>
+            </div>
+
+            <!-- Enhanced Navigation -->
+            <div class="nav-tabs" role="tablist">
+                <button class="nav-tab active" onclick="showSection('dashboard')" role="tab" aria-selected="true">
+                    📊<br>Dashboard
+                </button>
+                <button class="nav-tab" onclick="showSection('analyze')" role="tab" aria-selected="false">
+                    🔍<br>Analyze
+                </button>
+                <button class="nav-tab" onclick="showSection('community')" role="tab" aria-selected="false">
+                    👥<br>Community
+                </button>
+                <button class="nav-tab" onclick="showSection('finance')" role="tab" aria-selected="false">
+                    💰<br>Finance
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content" role="main">
+            <!-- Dashboard Section -->
+            <section class="section active" id="dashboard" role="tabpanel">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCattle">3</div>
+                        <div class="stat-label">Total Cattle</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="healthyCattle">2</div>
+                        <div class="stat-label">Healthy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="needAttention">1</div>
+                        <div class="stat-label">Need Attention</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="todayMilk">45.5L</div>
+                        <div class="stat-label">Today's Milk</div>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <div class="details-title">📈 Quick Insights & Alerts</div>
+                    <div class="detail-item">✅ Ganga shows excellent health metrics (Score: 8.7/10)</div>
+                    <div class="detail-item">⚠️ Lakshmi needs attention - reduced milk production detected</div>
+                    <div class="detail-item">🌤️ Weather: Perfect grazing conditions today</div>
+                    <div class="detail-item">💉 Next vaccination due in 3 days for Kamdhenu</div>
+                    <div class="detail-item">📊 Monthly profit increased by 12% this month</div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="showSection('analyze')">
+                        🔍 Analyze Cattle Health
+                    </button>
+                    <button class="btn btn-secondary" onclick="toggleVoiceCommand()">
+                        🎤 Voice Command
+                    </button>
+                </div>
+            </section>
+
+            <!-- Enhanced Analysis Section -->
+            <section class="section" id="analyze" role="tabpanel">
+                <!-- Upload Section -->
+                <div class="upload-section" id="uploadSection">
+                    <h3>📸 Upload Cattle Photo for AI Analysis</h3>
+                    <div class="upload-area" onclick="document.getElementById('imageInput').click()" 
+                         ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="handleDragLeave(event)">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-text">Tap to select photo or drag & drop</div>
+                        <div class="upload-subtext">
+                            📐 Best results: Side profile view, good lighting, full body visible<br>
+                            🔍 AI will detect keypoints and analyze body conformation
+                        </div>
+                        <div class="upload-buttons">
+                            <button class="camera-button" onclick="openCamera()" type="button">
+                                📱 Camera
+                            </button>
+                            <button class="voice-button" onclick="startVoiceGuide()" type="button">
+                                🎤 Voice Guide
+                            </button>
+                        </div>
+                    </div>
+                    <input type="file" id="imageInput" class="file-input" accept="image/*" onchange="handleImageUpload(this.files[0])" aria-label="Upload cattle image">
+                </div>
+
+                <!-- Image Preview Section -->
+                <div class="preview-section" id="previewSection">
+                    <h3>📋 Image Preview</h3>
+                    <div class="image-container" id="imageContainer">
+                        <img id="previewImage" class="preview-image" alt="Cattle preview for analysis">
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="analyzeHealth()">
+                            🧠 Start AI Analysis
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetApp()">
+                            🔄 Try Another Photo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Analysis Loading -->
+                <div class="analysis-section" id="analysisSection">
+                    <div class="loading">
+                        <div class="spinner" aria-label="Processing"></div>
+                        <h3 class="loading-text">🧠 AI Analysis in Progress</h3>
+                        <p class="loading-subtext">Detecting keypoints, measuring body proportions, and calculating health metrics...</p>
+                        <div style="margin-top: 20px; color: #666; font-size: 14px;">
+                            <div>⏳ Analyzing body frame structure...</div>
+                            <div>📏 Measuring key body dimensions...</div>
+                            <div>🎯 Calculating confidence scores...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Results -->
+                <div class="results-container" id="resultsContainer">
+                    <div class="score-card slide-up">
+                        <div class="score-label">Overall Health Score</div>
+                        <div class="overall-score" id="overallScore">8.7</div>
+                        <div class="status-badge status-excellent" id="statusBadge">Excellent Health</div>
+                        <div style="font-size: 14px; color: #666; margin-top: 10px;">
+                            Based on AI analysis of body conformation and structural soundness
+                        </div>
+                    </div>
+
+                    <!-- Breed Recognition Results -->
+                    <div class="details-section">
+                        <div class="details-title">🐄 AI Breed Recognition</div>
+                        <div id="breedResult" style="font-size: 18px; margin: 10px 0; font-weight: bold;">Gir-Holstein Cross</div>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0;">
+                            <span style="background: var(--primary-green); color: white; padding: 6px 12px; border-radius: 15px; font-size: 12px;">🐄 Gir 65%</span>
+                            <span style="background: var(--secondary-blue); color: white; padding: 6px 12px; border-radius: 15px; font-size: 12px;">🐄 Holstein 35%</span>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">
+                            🎯 AI Confidence: <strong>94%</strong> | Cross-breed detected with high accuracy
+                        </div>
+                    </div>
+
+                    <!-- Health Metrics Grid -->
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="bodyLengthMetric">2.41</div>
+                            <div class="metric-label">Body Length Ratio</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="bodyLengthProgress" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="hipWidthMetric">156</div>
+                            <div class="metric-label">Hip Width (px)</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="hipWidthProgress" style="width: 78%;"></div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="toplineMetric">4.2°</div>
+                            <div class="metric-label">Topline Angle</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="toplineProgress" style="width: 88%;"></div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="confidenceMetric">94%</div>
+                            <div class="metric-label">Detection Accuracy</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="confidenceProgress" style="width: 94%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Analysis -->
+                    <div class="details-section">
+                        <div class="details-title">📊 Detailed Health Analysis</div>
+                        <div class="detail-item">
+                            <strong>Body Frame Assessment:</strong>
+                            <span id="frameAssessment">Well-proportioned frame with excellent depth and length ratios</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Structural Soundness:</strong>
+                            <span id="structuralAssessment">Level topline indicates superior structural integrity</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Key Points Detected:</strong>
+                            Withers, Hip Left, Hip Right, Neck Base, Back Line
+                        </div>
+                        <div class="detail-item">
+                            <strong>Health Indicators:</strong>
+                            Body condition score: Excellent | Posture: Ideal | Conformation: Superior
+                        </div>
+                        
+                        <div class="recommendation">
+                            <strong>💡 Expert Recommendations:</strong>
+                            <div id="recommendations">
+                                Animal shows exceptional conformation scores indicating excellent health status. 
+                                Continue current nutrition and care regimen. Consider for premium breeding program. 
+                                Monitor for any changes in posture or movement patterns. Next health check recommended in 30 days.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="generateDetailedReport()">
+                            📄 Generate Report
+                        </button>
+                        <button class="btn btn-secondary" onclick="saveToRecords()">
+                            💾 Save to Records
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetApp()">
+                            🔄 Analyze Another
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Enhanced Community Section -->
+            <section class="section" id="community" role="tabpanel">
+                <h3>👥 Farmer Community & Expert Network</h3>
+                
+                <div class="stats-grid" style="margin-bottom: 20px;">
+                    <div class="stat-card">
+                        <div class="stat-number">1.2K+</div>
+                        <div class="stat-label">Active Farmers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Veterinarians</div>
+                    </div>
+                </div>
+
+                <div class="community-section">
+                    <div class="community-post">
+                        <div class="post-author">🧑‍🌾 Ramesh Patil • Maharashtra • Dairy Farmer</div>
+                        <div class="post-content">My Holstein cow showing reduced milk production from 18L to 12L daily. Feed is same, no visible health issues. What could be the reason? Any suggestions?</div>
+                        <div class="post-meta">
+                            <div class="post-actions">
+                                <button class="post-action">💬 5 answers</button>
+                                <button class="post-action">👍 12 likes</button>
+                                <button class="post-action">📤 Share</button>
+                            </div>
+                            <span>2 hours ago</span>
+                        </div>
+                    </div>
+
+                    <div class="community-post">
+                        <div class="post-author">👨‍⚕️ Dr. Sharma • Verified Veterinarian • Pune</div>
+                        <div class="post-content">🌧️ <strong>Monsoon Health Alert:</strong> With heavy rains starting, extra care needed for hoof health. Check for any signs of foot rot or lameness. Keep housing areas dry and clean. Apply copper sulfate solution weekly for prevention.</div>
+                        <div class="post-meta">
+                            <div class="post-actions">
+                                <button class="post-action">👍 45 likes</button>
+                                <button class="post-action">💬 8 comments</button>
+                                <button class="post-action">📤 Share</button>
+                            </div>
+                            <span>5 hours ago</span>
+                        </div>
+                    </div>
+
+                    <div class="community-post">
+                        <div class="post-author">🌟 Suresh Kumar • Punjab • Success Story</div>
+                        <div class="post-content">🎉 <strong>Great News!</strong> Using CattleHealth Pro's recommendations, I increased my herd's milk production by 18% in 3 months! Key was early disease detection and better nutrition planning. Thank you to this amazing community!</div>
+                        <div class="post-meta">
+                            <div class="post-actions">
+                                <button class="post-action">🎉 67 celebrations</button>
+                                <button class="post-action">💬 15 comments</button>
+                                <button class="post-action">📤 Share</button>
+                            </div>
+                            <span>1 day ago</span>
+                        </div>
+                    </div>
+
+                    <div class="community-post">
+                        <div class="post-author">🔬 Agricultural Research Institute • Official</div>
+                        <div class="post-content">📊 <strong>Research Update:</strong> Our latest study shows AI-based cattle health monitoring can detect diseases 7-10 days earlier than traditional methods. Early detection leads to 40% better treatment outcomes.</div>
+                        <div class="post-meta">
+                            <div class="post-actions">
+                                <button class="post-action">📊 Research data</button>
+                                <button class="post-action">👍 89 likes</button>
+                                <button class="post-action">📤 Share</button>
+                            </div>
+                            <span>2 days ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="askQuestion()">
+                        ❓ Ask Question
+                    </button>
+                    <button class="btn btn-secondary" onclick="shareSuccess()">
+                        🌟 Share Success
+                    </button>
+                    <button class="btn btn-secondary" onclick="findExperts()">
+                        🔍 Find Experts
+                    </button>
+                </div>
+            </section>
+
+            <!-- Enhanced Financial Dashboard -->
+            <section class="section" id="finance" role="tabpanel">
+                <h3>💰 Financial Management Dashboard</h3>
+                
+                <div class="financial-summary">
+                    <div class="details-title">📈 This Month's Performance</div>
+                    <div class="profit-indicator">₹33,000 Net Profit</div>
+                    <div style="text-align: center; color: #666; margin-bottom: 20px;">
+                        12% increase from last month 📈
+                    </div>
+                    
+                    <div class="expense-breakdown">
+                        <span class="expense-category">💰 Total Income (Milk Sales)</span>
+                        <span class="expense-amount income">₹85,000</span>
+                    </div>
+                    <div class="expense-breakdown">
+                        <span class="expense-category">🌾 Feed & Nutrition Costs</span>
+                        <span class="expense-amount expense">-₹35,000</span>
+                    </div>
+                    <div class="expense-breakdown">
+                        <span class="expense-category">💊 Medicine & Veterinary Care</span>
+                        <span class="expense-amount expense">-₹8,000</span>
+                    </div>
+                    <div class="expense-breakdown">
+                        <span class="expense-category">👨‍🌾 Labor & Maintenance</span>
+                        <span class="expense-amount expense">-₹9,000</span>
+                    </div>
+                    <hr style="margin: 15px 0;">
+                    <div class="expense-breakdown" style="font-size: 16px; font-weight: bold;">
+                        <span class="expense-category">💼 Net Profit Margin</span>
+                        <span class="expense-amount" style="color: var(--success-green);">38.8%</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">₹45</div>
+                        <div class="stat-label">Current Milk Price/L</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">₹28</div>
+                        <div class="stat-label">Feed Cost/kg</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">2.1L</div>
+                        <div class="stat-label">Avg. Daily Milk/Cattle</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Operational Efficiency</div>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <div class="details-title">📊 Market Intelligence</div>
+                    <div class="detail-item">📈 Milk prices expected to rise 5% next month</div>
+                    <div class="detail-item">🌾 Feed costs stable, no major changes predicted</div>
+                    <div class="detail-item">💡 Govt. subsidy available for AI breeding programs</div>
+                    <div class="detail-item">🏆 Your farm ranks in top 15% for profitability</div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="addExpense()">
+                        ➕ Add Expense
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewTrends()">
+                        📊 View Trends
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportData()">
+                        📤 Export Report
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    
+</body>
+</html>
